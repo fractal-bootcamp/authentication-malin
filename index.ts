@@ -3,10 +3,12 @@ import path from "path";
 import cors from "cors";
 import { authenticate, AUTH_SECRET } from "./middleware/middleware";
 import {sign} from "jsonwebtoken";
-const PORT = process.env.PORT
+
+const PORT = process.env.PORT || 3001;
 
 const app = express();
 app.use(cors());
+app.use(express.json()); //parse JSON request bodies
 
 // create some dummy users in an object with name and password set
 const users = {
@@ -27,6 +29,10 @@ const generateToken = (id: string) => {
   const token = sign({id}, AUTH_SECRET, {algorithm: "HS256", expiresIn: "1h"});
   return token;
 };
+
+app.get("/", (req, res) => {
+  res.send("hello!")
+})
 
 // create a route for accepting login requests
 app.post("/login", async (req, res) => {
@@ -77,10 +83,11 @@ app.get("/authenticated", authenticate, (req, res) => {
   // in the users object search for the entry with key "id" and return the name field
   const { name } = users[req.user.id]
 
-  res.send(name + "is authenticated!");
+  res.send(name + " is authenticated!");
+})
+
 })
 
 app.listen(PORT, () => console.log(`Server running on ${PORT}`))
-})
-
+console.log(`server is running on http://localhost:${PORT}`)
 console.log("Hello via Bun!");
