@@ -8,7 +8,6 @@ interface UserLogin {
   password: string;
 }
 
-
 export function LoginForm() {
   const navigate = useNavigate();
   const serverURL = 'http://localhost:3009'
@@ -36,7 +35,7 @@ export function LoginForm() {
           state: userLoginDetails.name
         })
 
-      } catch (error) {
+      } catch (error: unknown) {
         console.error("Login failed: ", error);
         alert(`${error.response.data.message}`)
       }
@@ -50,7 +49,7 @@ export function LoginForm() {
         navigate('/success', {
           state: userLoginDetails.name
         });
-      } catch (error) {
+      } catch (error: unknown) {
         console.error("Signup failed: ", error);
         if (error.response) {
           // The request was made and the server responded with a status code
